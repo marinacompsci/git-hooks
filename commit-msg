@@ -20,7 +20,7 @@ if echo "$commit_msg" | grep -qE "^Merge branch '\w+'"; then
     exit 0
 fi
 
-echo "Validating commit message: $commit_msg"
+echo "Validating commit message: '$commit_msg'"
 
 # Check for conventional commit format
 if ! echo "$commit_msg" | grep -qE "^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+"; then
@@ -38,6 +38,7 @@ mispelled_words=$(echo "$commit_msg_after_colon" | hunspell -d en_US -l)
 
 if [[ $mispelled_words != "" ]]; then
     echo "Error: You have a typo in '${commit_msg_after_colon}'"
+    echo "Possible Typos: ${mispelled_words}"
     exit 1
 fi
 
