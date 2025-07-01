@@ -2,7 +2,12 @@
 
 # RUN THIS INSIDE .git/hooks OF YOUR GIT REPO
 
-cat extra_words | xargs -I {} echo -e "*{}\\n#" | hunspell -a
+cat extra_words >> $HOME/.hunspell_en_US
 
-ln -s $HOME/developer/git-hooks/commit-msg .git/hooks
-ln -s $HOME/developer/git-hooks/pre-commit .git/hooks
+echo "Symlink files? [y/n]"
+read run_symlink
+
+if [[ "$run_symlink" == "y" ]]; then
+    ln -s $HOME/developer/git-hooks/commit-msg .git/hooks
+    ln -s $HOME/developer/git-hooks/pre-commit .git/hooks
+fi
