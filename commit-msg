@@ -10,12 +10,20 @@
 
 # The commit message file is the first argument
 commit_msg_file="$1"
-commit_message=$(cat "$commit_msg_file")
+commit_msg=$(cat "$commit_msg_file")
+success_msg="Commit message validation passed!"
 
-echo "Validating commit message: $commit_message"
+
+# Let pass if it is a merge commit message
+if echo "$commit_msg" | grep -qE "^Merge branch '\w+'"; then
+    echo "$success_msg"
+    exit 0
+fi
+
+echo "Validating commit message: $commit_msg"
 
 # Check for conventional commit format
-if ! echo "$commit_message" | grep -qE "^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+"; then
+if ! echo "$commit_msg" | grep -qE "^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+"; then
     echo "Error: Commit message must follow conventional commit format"
     echo "Format: type(scope): description"
     echo "Examples:"
@@ -25,13 +33,14 @@ if ! echo "$commit_message" | grep -qE "^(feat|fix|docs|style|refactor|test|chor
     exit 1
 fi
 
-commit_message_after_colon=$(echo "$commit_message" | sed -E 's#^(.*): ##')
-mispelled_words=$(echo "$commit_message_after_colon" | hunspell -d en_US -l)
+commit_msg_after_colon=$(echo "$commit_msg" | sed -E 's#^(.*): ##')
+mispelled_words=$(echo "$commit_msg_after_colon" | hunspell -d en_US -l)
 
 if [[ $mispelled_words != "" ]]; then
-    echo "Error: You have a typo in '${commit_message_after_colon}'"
+    echo "Error: You have a typo in '${commit_msg_after_colon}'"
     exit 1
 fi
 
-echo "Commit message validation passed!"
+echo "$success_msg"
 exit 0
+
