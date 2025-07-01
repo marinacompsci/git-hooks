@@ -25,10 +25,11 @@ if ! echo "$commit_message" | grep -qE "^(feat|fix|docs|style|refactor|test|chor
     exit 1
 fi
 
-mispelled_words=$(echo "$commit_message" | hunspell -d en_US) 
+commit_message_after_colon=$(echo "$commit_message" | sed -E 's#^(.*): ##')
+mispelled_words=$(echo "$commit_message_after_colon" | hunspell -d en_US -l)
 
 if [[ $mispelled_words != "" ]]; then
-    echo "Error: You have a typo in '${mispelled_words}'"
+    echo "Error: You have a typo in '${commit_message_after_colon}'"
     exit 1
 fi
 
