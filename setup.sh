@@ -2,11 +2,7 @@
 
 # RUN THIS INSIDE .git/hooks OF YOUR GIT REPO
 
-<<<<<<< Updated upstream
-cat $HOME/developer/git-hooks/extra_words >> $HOME/.hunspell_en_US
-=======
 cat extra_words > $HOME/.hunspell_en_US
->>>>>>> Stashed changes
 
 echo "Symlink files? [y/N]"
 read run_symlink
